@@ -1,0 +1,32 @@
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
+build/
+
+# Node.js
+node_modules/
+dist/
+build/
+*.log
+.env*
+coverage/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+*.swp
+.DS_Store
+Thumbs.db
+
+# Spec Kit
+/specs/**/research.md
+/specs/**/data-model.md
+/specs/**/contracts/
+/specs/**/quickstart.md
+/specs/**/plan.md
+/specs/**/tasks.md

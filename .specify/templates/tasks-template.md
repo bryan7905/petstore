@@ -20,10 +20,8 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Web app**: `backend/src/main/java/`, `frontend/src/`
+- Paths shown below assume web app structure - adjust based on plan.md structure
 
 <!-- 
   ============================================================================
@@ -49,8 +47,9 @@ description: "Task list template for feature implementation"
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T002 Initialize Java Spring Boot project (backend)
+- [ ] T003 Initialize React project with Tailwind and MUI (frontend)
+- [ ] T004 [P] Configure Checkstyle (Java) and ESLint/Prettier (React)
 
 ---
 
@@ -60,14 +59,12 @@ description: "Task list template for feature implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-Examples of foundational tasks (adjust based on your project):
-
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T005 Setup PostgreSQL database and Flyway/Liquibase migrations
+- [ ] T006 [P] Implement Spring Security/JWT framework
+- [ ] T007 [P] Setup Spring Boot REST Controller and Exception Handling
+- [ ] T008 Create base JPA entities that all stories depend on
+- [ ] T009 Configure Render deployment pipeline (blueprint)
+- [ ] T010 Setup environment variables and Spring Profiles
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

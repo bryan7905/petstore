@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **I. Full-Stack Excellence**: Does the approach maintain consistency between Spring Boot and React?
+- [ ] **II. Mobile-First & Responsive Design**: Is the UI plan using Tailwind/MUI and mobile-optimized?
+- [ ] **III. Scalable Cloud Architecture**: Does the design align with Render/Postgres deployment?
+- [ ] **IV. Robust API First**: Are REST endpoints clearly defined and versioned?
+- [ ] **V. Quality Driven Development**: Is there a plan for unit and integration testing?
 
 ## Project Structure
 
