@@ -4,8 +4,6 @@ services:
     runtime: docker
     plan: free
     rootDir: backend
-    buildCommand: mvn clean install -DskipTests
-    startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
