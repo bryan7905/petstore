@@ -76,13 +76,20 @@ const PetListPage = () => {
       
       {error && <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>{error}</Alert>}
       
-      <Grid container spacing={4}>
-        {pets.map(pet => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={pet.id}>
-            <PetCard pet={pet} onEdit={(p) => { setSelectedPet(p); setModalOpen(true); }} onDelete={handleDelete} />
-          </Grid>
-        ))}
-      </Grid>
+      {pets.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {pets.map(pet => (
+            <div key={pet.id} className="h-full">
+              <PetCard pet={pet} onEdit={(p) => { setSelectedPet(p); setModalOpen(true); }} onDelete={handleDelete} />
+            </div>
+          ))}
+        </div>
+      ) : !loading && (
+        <Box textAlign="center" py={10} bgcolor="#f8fafc" borderRadius={4} border="2px dashed #e2e8f0">
+          <Typography variant="h5" color="text.secondary" gutterBottom>No pets available</Typography>
+          <Typography color="text.secondary">We couldn't find any pets matching your criteria.</Typography>
+        </Box>
+      )}
       
       <PetFormModal open={modalOpen} handleClose={() => setModalOpen(false)} onSave={handleSave} pet={selectedPet} />
       <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({...snackbar, open: false})}>
