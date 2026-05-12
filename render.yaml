@@ -1,7 +1,7 @@
 services:
   - type: web
     name: petstore-backend
-    env: java
+    runtime: docker
     plan: free
     rootDir: backend
     buildCommand: mvn clean install -DskipTests
@@ -15,11 +15,11 @@ services:
         fromService:
           type: web
           name: petstore-frontend
-          property: url
+          property: host
 
   - type: web
     name: petstore-frontend
-    env: static
+    runtime: static
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
@@ -29,7 +29,7 @@ services:
         fromService:
           type: web
           name: petstore-backend
-          property: url
+          property: host
         append: /galang/v1
 
 databases:
