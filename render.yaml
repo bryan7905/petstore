@@ -5,10 +5,26 @@ services:
     plan: free
     rootDir: backend
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      - key: SPRING_DATASOURCE_HOST
         fromDatabase:
           name: petstore-db
-          property: connectionString
+          property: host
+      - key: SPRING_DATASOURCE_PORT
+        fromDatabase:
+          name: petstore-db
+          property: port
+      - key: SPRING_DATASOURCE_DATABASE
+        fromDatabase:
+          name: petstore-db
+          property: database
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: petstore-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: petstore-db
+          property: password
       - key: APP_CORS_ALLOWED_ORIGINS
         fromService:
           type: web
