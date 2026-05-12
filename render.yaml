@@ -3,7 +3,8 @@ services:
     name: petstore-backend
     env: java
     plan: free
-    buildCommand: ./mvnw clean install -DskipTests
+    rootDir: backend
+    buildCommand: mvn clean install -DskipTests
     startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_DATASOURCE_URL
@@ -20,6 +21,7 @@ services:
     name: petstore-frontend
     env: static
     plan: free
+    rootDir: frontend
     buildCommand: npm install && npm run build
     publishDir: dist
     envVars:
