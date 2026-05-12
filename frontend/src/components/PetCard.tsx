@@ -2,8 +2,15 @@ import React from 'react';
 import { Card, CardContent, Typography, CardMedia, Box, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Pet } from '../types';
 
-const PetCard = ({ pet, onEdit, onDelete }) => (
+interface PetCardProps {
+  pet: Pet;
+  onEdit: (pet: Pet) => void;
+  onDelete: (id: number) => void;
+}
+
+const PetCard: React.FC<PetCardProps> = ({ pet, onEdit, onDelete }) => (
   <Card sx={{ 
     height: '100%', 
     display: 'flex', 
@@ -41,7 +48,7 @@ const PetCard = ({ pet, onEdit, onDelete }) => (
         </IconButton>
       </Tooltip>
       <Tooltip title="Delete">
-        <IconButton size="small" onClick={() => onDelete(pet.id)} sx={{ color: '#f43f5e', '&:hover': { bgcolor: '#fff1f2' } }}>
+        <IconButton size="small" onClick={() => onDelete(pet.id!)} sx={{ color: '#f43f5e', '&:hover': { bgcolor: '#fff1f2' } }}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Tooltip>

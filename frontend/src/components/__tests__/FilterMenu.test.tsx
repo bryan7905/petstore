@@ -1,11 +1,13 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest';
 import FilterMenu from '../FilterMenu';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { Species } from '../../types';
 
 const theme = createTheme();
 
-const renderWithTheme = (ui) => {
+const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
 };
 
@@ -35,7 +37,6 @@ describe('FilterMenu', () => {
     const option = screen.getByText('Dogs');
     fireEvent.click(option);
     
-    // MUI Select uses a hidden input, so we check if the callback was called
-    expect(onFilterChange).toHaveBeenCalledWith('DOG');
+    expect(onFilterChange).toHaveBeenCalledWith(Species.DOG);
   });
 });

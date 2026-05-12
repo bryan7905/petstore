@@ -1,63 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, TextField, Button, MenuItem, Typography, Select, FormControl, InputLabel, CircularProgress } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, MenuItem, Grid } from '@mui/material';
+import { Pet, Species } from '../types';
 
-const style = {
-  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-  width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,
-};
+interface PetFormModalProps {
+  open: boolean;
+  handleClose: () => void;
+  onSave: (pet: Pet) => Promise<void>;
+  pet?: Pet | null;
+}
 
-const PetFormModal = ({ open, handleClose, onSave, pet }) => {
-  const [formData, setFormData] = useState({ name: '', species: 'DOG', price: 0, imageUrl: '' });
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+const PetFormModal: React.FC<PetFormModalProps> = ({ open, handleClose, onSave, pet }) => {
+  const [formData, setFormData] = useState<Partial<Pet>>({
+    name: '',
+    species: Species.DOG,
+    price: 0,
+    imageUrl: ''
+  });
 
   useEffect(() => {
-    if (pet) setFormData(pet);
-    else setFormData({ name: '', species: 'DOG', price: 0, imageUrl: '' });
-    setErrors({});
+    if (pet) {
+      setFormData(pet);
+    } else {
+      setFormData({
+        name: '',
+        species: Species.DOG,
+        price: 0,
+        imageUrl: ''
+      });
+    }
   }, [pet, open]);
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (formData.price < 0) newErrors.price = 'Price must be positive';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validate()) return;
-    setLoading(true);
-    try {
-      await onSave(formData);
-      handleClose();
-    } catch (err) {
-      console.error(err);
-      alert('Failed to save pet');
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await onSave(formData as Pet);
+    handleClose();
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={style}>
-        <Typography variant="h6" mb={2}>{pet ? 'Edit Pet' : 'Add New Pet'}</Typography>
-        <TextField fullWidth label="Name" margin="normal" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} error={!!errors.name} helperText={errors.name} />
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Species</InputLabel>
-          <Select value={formData.species} onChange={e => setFormData({...formData, species: e.target.value})}>
-            <MenuItem value="DOG">Dog</MenuItem>
-            <MenuItem value="CAT">Cat</MenuItem>
-            <MenuItem value="BIRD">Bird</MenuItem>
-            <MenuItem value="FISH">Fish</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField fullWidth label="Price" type="number" margin="normal" value={formData.price} onChange={e => setFormData({...formData, price: parseFloat(e.target.value)})} error={!!errors.price} helperText={errors.price} />
-        <TextField fullWidth label="Image URL" margin="normal" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
-        <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSubmit} disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : 'Save'}
-        </Button>
+      <Box sx={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        width: 450, bgcolor: 'background.paper', borderRadius: 4, boxShadow: 24, p: 4,
+      }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, mb: 3 }}>
+          {pet ? 'Edit Pet Details' : 'Add New Pet'}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth label="Pet Name" required
+                value={formData.name || ''}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                select fullWidth label="Species" required
+                value={formData.species || Species.DOG}
+                onChange={(e) => setFormData({ ...formData, species: e.target.value as Species })}
+              >
+                {Object.values(Species).map((s) => (
+                  <MenuItem key={s} value={s}>{s}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth label="Price ($)" type="number" required
+                value={formData.price || 0}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth label="Image URL"
+                value={formData.imageUrl || ''}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <Button fullWidth variant="contained" type="submit" size="large" sx={{ py: 1.5, borderRadius: 2, bgcolor: '#6366f1', '&:hover': { bgcolor: '#4f46e5' } }}>
+                {pet ? 'Save Changes' : 'Create Listing'}
+              </Button>
+              <Button fullWidth variant="outlined" onClick={handleClose} size="large" sx={{ py: 1.5, borderRadius: 2 }}>
+                Cancel
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
       </Box>
     </Modal>
   );

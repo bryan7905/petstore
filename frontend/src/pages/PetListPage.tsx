@@ -3,17 +3,22 @@ import { getPets, createPet, updatePet, deletePet } from '../api/petApi';
 import PetCard from '../components/PetCard';
 import FilterMenu from '../components/FilterMenu';
 import PetFormModal from '../components/PetFormModal';
-import { CircularProgress, Typography, Button, Box, Snackbar, Alert, Grid, Container } from '@mui/material';
+import { CircularProgress, Typography, Button, Box, Snackbar, Alert, Container } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { Pet, Species, SnackbarState, AlertSeverity } from '../types';
 
 const PetListPage = () => {
-  const [pets, setPets] = useState([]);
-  const [species, setSpecies] = useState('');
+  const [pets, setPets] = useState<Pet[]>([]);
+  const [species, setSpecies] = useState<Species | ''>('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPet, setSelectedPet] = useState(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({ 
+    open: false, 
+    message: '', 
+    severity: 'success' 
+  });
 
   const fetchAll = async () => {
     try {
@@ -29,11 +34,15 @@ const PetListPage = () => {
 
   useEffect(() => { fetchAll(); }, [species]);
 
-  const handleSave = async (petData) => {
+  const handleSave = async (petData: Pet) => {
     try {
-      if (selectedPet) await updatePet(selectedPet.id, petData);
+      if (selectedPet && selectedPet.id) await updatePet(selectedPet.id, petData);
       else await createPet(petData);
-      setSnackbar({ open: true, message: `Pet ${selectedPet ? 'updated' : 'created'} successfully!`, severity: 'success' });
+      setSnackbar({ 
+        open: true, 
+        message: `Pet ${selectedPet ? 'updated' : 'created'} successfully!`, 
+        severity: 'success' 
+      });
       await fetchAll();
     } catch (err) {
       setSnackbar({ open: true, message: 'Failed to save pet', severity: 'error' });
@@ -41,7 +50,7 @@ const PetListPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this pet?')) return;
     try {
       await deletePet(id);
@@ -93,7 +102,7 @@ const PetListPage = () => {
       
       <PetFormModal open={modalOpen} handleClose={() => setModalOpen(false)} onSave={handleSave} pet={selectedPet} />
       <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({...snackbar, open: false})}>
-        <Alert severity={snackbar.severity} sx={{ borderRadius: 2 }}>{snackbar.message}</Alert>
+        <Alert severity={snackbar.severity as AlertSeverity} sx={{ borderRadius: 2 }}>{snackbar.message}</Alert>
       </Snackbar>
     </Container>
   );

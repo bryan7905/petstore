@@ -1,18 +1,20 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect, vi } from 'vitest';
 import PetCard from '../PetCard';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { Pet, Species } from '../../types';
 
 const theme = createTheme();
 
-const renderWithTheme = (ui) => {
+const renderWithTheme = (ui: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
 };
 
-const mockPet = {
+const mockPet: Pet = {
   id: 1,
   name: 'Buddy',
-  species: 'DOG',
+  species: Species.DOG,
   price: 299.99,
   imageUrl: 'http://example.com/buddy.jpg'
 };
@@ -28,7 +30,7 @@ describe('PetCard', () => {
   });
 
   test('uses placeholder image if imageUrl is missing', () => {
-    const petWithoutImage = { ...mockPet, imageUrl: null };
+    const petWithoutImage: Pet = { ...mockPet, imageUrl: '' };
     renderWithTheme(<PetCard pet={petWithoutImage} onEdit={vi.fn()} onDelete={vi.fn()} />);
     
     const img = screen.getByAltText('Buddy');
@@ -52,6 +54,6 @@ describe('PetCard', () => {
     const deleteButton = screen.getByRole('button', { name: /delete/i });
     fireEvent.click(deleteButton);
     
-    expect(onDelete).toHaveBeenCalledWith(mockPet.id);
+    expect(onDelete).toHaveBeenCalledWith(mockPet.id!);
   });
 });
